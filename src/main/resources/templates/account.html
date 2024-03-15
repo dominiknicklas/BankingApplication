@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Successful Deposit Page</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+</head>
+<body>
+
+<div class="col-md-9 col-sm-11 mx-auto my-5">
+
+    <div class="text-center">
+        <h1>Account of: <span th:text="${customer.firstName}"/> <span th:text="${customer.lastName}"/></h1>
+    </div>
+    <hr>
+    <h4>
+        <p style="color:darkgreen"><span th:text="${message}"/></p>
+    </h4>
+    <h4>
+        <p style="color:red"><span th:text="${deleteMessage}"/></p>
+    </h4>
+    <h4>Balance: <span th:text="${#numbers.formatCurrency(customer.balance)}"/></h4>
+    <hr>
+
+    <!--    Deposit Money Form -->
+    <h5>Deposit Money:</h5>
+    <form class="row row-cols-lg-auto g-3 align-items-center" action="#" th:action="@{/account/actions/processDeposit}" th:object="${actionAmount}" method="POST">
+        <div class="col-12">
+            <label class="visually-hidden" for="inputAmountDeposit">Amount</label>
+            <div class="input-group">
+                <div class="input-group-text">€</div>
+                <input type="text" th:field="*{amount}" class="form-control" id="inputAmountDeposit" placeholder="Amount">
+            </div>
+        </div>
+        <input type="hidden" th:value="${customer.accountId}" th:attr="name='accountId'"/>
+        <div class="col-12">
+            <button type="submit" class="btn btn-secondary">Deposit</button>
+        </div>
+    </form>
+
+    <hr>
+
+    <!--    Withdraw Money Form -->
+    <h5>Withdraw Money:</h5>
+    <form class="row row-cols-lg-auto g-3 align-items-center" action="#" th:action="@{/account/actions/processWithdraw}" th:object="${actionAmount}" method="POST">
+        <div class="col-12">
+            <label class="visually-hidden" for="inputAmountWithdraw">Amount</label>
+            <div class="input-group">
+                <div class="input-group-text">€</div>
+                <input type="text" th:field="*{amount}" class="form-control" id="inputAmountWithdraw" placeholder="Amount">
+            </div>
+        </div>
+        <input type="hidden" th:value="${customer.accountId}" th:attr="name='accountId'"/>
+        <div class="col-12">
+            <button type="submit" class="btn btn-secondary">Withdraw</button>
+        </div>
+    </form>
+
+    <hr>
+
+    <!--    Transfer Money Form -->
+    <h5>Transfer Money:</h5>
+    <form class="row row-cols-lg-auto g-3 align-items-center" action="#" th:action="@{/account/actions/processTransaction}" th:object="${actionAmount}" method="POST">
+        <div class="col-12">
+            <label class="visually-hidden" for="inputAmountTransfer">Amount</label>
+            <div class="input-group">
+                <div class="input-group-text">€</div>
+                <input type="text" th:field="*{amount}" class="form-control" id="inputAmountTransfer" placeholder="Amount">
+            </div>
+        </div>
+        <div class="col-12">
+            <label class="visually-hidden" for="inputOtherAccountId">Amount</label>
+            <div class="input-group">
+                <div class="input-group-text">@</div>
+                <input type="text" th:field="*{otherAccountId}" class="form-control" id="inputOtherAccountId" placeholder="Transfer to Account ID">
+            </div>
+        </div>
+        <input type="hidden" th:value="${customer.accountId}" th:attr="name='accountId'"/>
+        <div class="col-12">
+            <button type="submit" class="btn btn-secondary">Transfer</button>
+        </div>
+    </form>
+
+    <hr>
+
+    <div class="position-relative">
+        <div class="position-absolute top-0 start-0">
+        <!--    Logout-->
+            <form action="#" th:action="@{/logout}" method="POST">
+                <button type="submit" class="btn btn-warning">Logout</button>
+            </form>
+        </div>
+        <div class="position-absolute top-0 end-0">
+<!--            Delete Account-->
+            <form action="#" th:action="@{/account/actions/deleteAccount}" th:object="${actionAmount}" method="POST">
+                <input type="hidden" th:value="${customer.accountId}" th:attr="name='accountId'"/>
+                <button type="submit" class="btn btn-danger">Delete Account</button>
+            </form>
+        </div>
+    </div>
+
+</div>
+
+</body>
+</html>
